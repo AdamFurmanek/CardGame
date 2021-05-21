@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dragon : CardInfo
 {
-    public Dragon()
+    public Dragon() : base()
     {
         health = 10;
         strength = 1;

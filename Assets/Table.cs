@@ -38,10 +38,12 @@ public class Table : MonoBehaviour
             {
                 GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
                 card.cardObject = newCardObject.GetComponent<Card>();
+                newCardObject.GetComponent<Card>().table = this;
                 newCardObject.GetComponent<Card>().cardInfo = card;
                 newCardObject.GetComponent<Card>().originalPlayer = i;
                 newCardObject.GetComponent<Card>().area = 0;
                 newCardObject.GetComponent<Card>().ResetStats();
+                newCardObject.GetComponent<Card>().cardInfo.SetPossibleMoves();
                 //i - gracz (0-1), 0 - stos
                 cards[i][0].Add(newCardObject);
             }
@@ -93,6 +95,7 @@ public class Table : MonoBehaviour
         cards[card.actualPlayer][card.area].Remove(cardObject);
         card.area = destination;
         cards[card.actualPlayer][card.area].Add(cardObject);
+        card.cardInfo.OnChangingArea();
     }
 
 }

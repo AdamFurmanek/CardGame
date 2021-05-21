@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Warrior : CardInfo
 {
-    public Warrior()
+    public Warrior() : base()
     {
         health = 5;
         strength = 2;
@@ -13,7 +13,7 @@ public class Warrior : CardInfo
     //Przyk³adowy override metody: regeneracja 1pkt zdrowia przy odzyskaniu tury.
     public override void OnReceivingTurn()
     {
-        Debug.Log("Nowa metoda tury");
+        //Debug.Log("Nowa metoda tury");
         if (cardObject.actualHealth < health)
             cardObject.actualHealth++;
     }
