@@ -33,7 +33,11 @@ public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN); // plane vs. line intersection in algebric form. It find t as distance from the camera of the new point in the ray's direction.
         Vector3 P = r.origin + r.direction * t; // Find the new point.
 
-        transform.position = P;
+        transform.position = P ;
+
+        transform.position = new Vector3(transform.position.x, 2, transform.position.z);
+
+        //TODO: Dymki mówi¹ce nad czym jest karta
 
         GameObject otherObject = CheckActionPossibility(r, true);
         if(otherObject != null)

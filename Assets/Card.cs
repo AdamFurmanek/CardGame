@@ -10,6 +10,10 @@ public class Card : MonoBehaviour
     public int originalPlayer, actualPlayer;
     public int area;
 
+    public GameObject healthLabel;
+    public GameObject strengthLabel;
+
+    public float positionXOffset, positionZOffset, rotationOffset;
 
     public void ResetStats()
     {
