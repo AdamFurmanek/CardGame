@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class CardInfo
 {
-    public Card cardObject;
+    public Card card;
     public int strength, health;
 
     public List<string> possibleMoves = new List<string>(); //ABCD:  A - from? (0-2) B - where? (0-3) C - whose? (m/o) D - card/area(c/a)
@@ -26,9 +26,10 @@ public abstract class CardInfo
 
     }
 
-    public virtual void OnHittingOtherCard(GameObject otherCard)
+    public virtual void OnHittingOtherCard(GameObject otherCardObject)
     {
-
+        //Card otherCard = otherCardObject.GetComponent<Card>
+        //if (otherCard.GetComponent<>)
     }
 
 }

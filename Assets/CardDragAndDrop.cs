@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CardDragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     Camera mainCamera;
     Vector3 originalPosition;
@@ -14,14 +14,16 @@ public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         mainCamera = Camera.main;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-
+        originalPosition = transform.position;
+        gameObject.transform.localScale = new Vector3(1.65f * 1.1f, 0.0001f, 2.55f * 1.1f);
+        transform.position = new Vector3(transform.position.x, 3, transform.position.z);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        originalPosition = transform.position;
+        gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -35,7 +37,7 @@ public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHan
 
         transform.position = P ;
 
-        transform.position = new Vector3(transform.position.x, 2, transform.position.z);
+        transform.position = new Vector3(transform.position.x, 3, transform.position.z);
 
         //TODO: Dymki mówi¹ce nad czym jest karta
 
@@ -56,6 +58,7 @@ public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHan
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
         Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
         GameObject otherObject = CheckActionPossibility(r, true);
         if (otherObject != null)
@@ -74,6 +77,12 @@ public class CardDragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHan
                 transform.position = originalPosition;
             }
         }
+        this.gameObject.GetComponent<Card>().table.CleanTable();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
         this.gameObject.GetComponent<Card>().table.CleanTable();
     }
 

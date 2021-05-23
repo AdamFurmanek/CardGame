@@ -38,7 +38,7 @@ public class Table : MonoBehaviour
             foreach (CardInfo card in newCards[i])
             {
                 GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-                card.cardObject = newCardObject.GetComponent<Card>();
+                card.card = newCardObject.GetComponent<Card>();
                 newCardObject.GetComponent<Card>().table = this;
                 newCardObject.GetComponent<Card>().cardInfo = card;
                 newCardObject.GetComponent<Card>().originalPlayer = i;
@@ -88,12 +88,12 @@ public class Table : MonoBehaviour
             {
                 GameObject cardObject = cards[i][1][j];
                 Card card = cardObject.GetComponent<Card>();
-                float difference = cardObject.transform.lossyScale.x / 2 - ((float)cards[i][1].Count/40);
+                float difference = 1.65f / 2 - ((float)cards[i][1].Count/40);
                 Debug.Log(difference);
                 float offset = -(cards[i][1].Count - 1) * difference;
                 cardObject.transform.position = areas[2 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
-                    + new Vector3(0, 1, 0) * (0.1f + j * 0.0001f)
+                    + new Vector3(0, 1, 0) * (2f + j * 0.0001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }
@@ -106,11 +106,11 @@ public class Table : MonoBehaviour
             {
                 GameObject cardObject = cards[i][2][j];
                 Card card = cardObject.GetComponent<Card>();
-                float difference = cardObject.transform.lossyScale.x / 2 - ((float)cards[i][2].Count / 40);
+                float difference = 1.65f / 2 - ((float)cards[i][2].Count / 40);
                 float offset = -(cards[i][2].Count - 1) * difference;
                 cardObject.transform.position = areas[4 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
-                    + new Vector3(0, 1, 0) * j * 0.01f
+                    + new Vector3(0, 1, 0) * j * 0.0001f
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }
@@ -124,7 +124,7 @@ public class Table : MonoBehaviour
                 GameObject cardObject = cards[i][3][j];
                 Card card = cardObject.GetComponent<Card>();
                 cardObject.transform.position = areas[6 + i].transform.position
-                    + new Vector3(0, 1, 0) * j * 0.01f
+                    + new Vector3(0, 1, 0) * j * 0.0001f
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }

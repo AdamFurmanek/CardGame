@@ -14,7 +14,7 @@ public class Warrior : CardInfo
     public override void OnReceivingTurn()
     {
         //Debug.Log("Nowa metoda tury");
-        if (cardObject.actualHealth < health)
-            cardObject.actualHealth++;
+        if (card.actualHealth < health)
+            card.actualHealth++;
     }
 }
