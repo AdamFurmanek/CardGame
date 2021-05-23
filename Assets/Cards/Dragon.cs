@@ -8,5 +8,6 @@ public class Dragon : CardInfo
     {
         health = 10;
         strength = 1;
+        name = "Dragon";
     }
 }

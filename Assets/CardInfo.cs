@@ -6,6 +6,7 @@ public abstract class CardInfo
 {
     public Card card;
     public int strength, health;
+    public string name;
 
     public List<string> possibleMoves = new List<string>(); //ABCD:  A - from? (0-2) B - where? (0-3) C - whose? (m/o) D - card/area(c/a)
 
@@ -18,18 +19,30 @@ public abstract class CardInfo
 
     public virtual void OnReceivingTurn()
     {
-        //Debug.Log("Podstawowa metoda tury");
+
     }
 
     public virtual void OnChangingArea()
     {
-
+        card.areaParticles.Play();
     }
 
     public virtual void OnHittingOtherCard(GameObject otherCardObject)
     {
-        //Card otherCard = otherCardObject.GetComponent<Card>
-        //if (otherCard.GetComponent<>)
+        Card otherCard = otherCardObject.GetComponent<Card>();
+        otherCard.hitParticles.Play();
+        otherCard.actualHealth -= card.actualStrength;
+        otherCard.hitParticles.Play();
+        if (otherCard.actualHealth <= 0)
+        {
+            otherCard.cardInfo.OnDie();
+            otherCard.deathParticles.Play();
+        }
+    }
+
+    public virtual void OnDie()
+    {
+        card.table.ChangeArea(card.gameObject, 3);
     }
 
 }

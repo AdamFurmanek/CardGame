@@ -35,17 +35,18 @@ public class Table : MonoBehaviour
         //Wczytanie kart na stó³ (taka minifabryka)
         for(int i = 0; i < 2; i++)
         {
-            foreach (CardInfo card in newCards[i])
+            foreach (CardInfo cardInfo in newCards[i])
             {
                 GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-                card.card = newCardObject.GetComponent<Card>();
-                newCardObject.GetComponent<Card>().table = this;
-                newCardObject.GetComponent<Card>().cardInfo = card;
-                newCardObject.GetComponent<Card>().originalPlayer = i;
-                newCardObject.GetComponent<Card>().ResetStats();
-                newCardObject.GetComponent<Card>().cardInfo.SetPossibleMoves();
+                
+                cardInfo.card = newCardObject.GetComponent<Card>();
+                cardInfo.card.table = this;
+                cardInfo.card.cardInfo = cardInfo;
+                cardInfo.card.originalPlayer = i;
+                cardInfo.card.ResetStats();
+                cardInfo.SetPossibleMoves();
+                cardInfo.card.nameLabel.GetComponent<TextMeshPro>().text = cardInfo.name;
                 ChangeArea(newCardObject, 0);
-                //i - gracz (0-1), 0 - stos
             }
         }
 
@@ -66,7 +67,6 @@ public class Table : MonoBehaviour
 
     public void CleanTable()
     {
-
         //Stos
         for(int i = 0; i < 2; i++)
         {

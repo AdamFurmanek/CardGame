@@ -8,6 +8,7 @@ public class Warrior : CardInfo
     {
         health = 5;
         strength = 2;
+        name = "Warrior";
     }
 
     //Przyk³adowy override metody: regeneracja 1pkt zdrowia przy odzyskaniu tury.

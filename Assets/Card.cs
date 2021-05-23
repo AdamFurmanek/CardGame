@@ -12,6 +12,11 @@ public class Card : MonoBehaviour
 
     public GameObject healthLabel;
     public GameObject strengthLabel;
+    public GameObject nameLabel;
+
+    public ParticleSystem hitParticles;
+    public ParticleSystem deathParticles;
+    public ParticleSystem areaParticles;
 
     public float positionXOffset, positionZOffset, rotationOffset;
 
