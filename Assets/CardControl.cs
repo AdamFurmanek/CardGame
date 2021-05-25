@@ -4,14 +4,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardDragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     Camera mainCamera;
+    Card card;
     Vector3 originalPosition;
+    bool debugBothPlayers = true;
 
     private void Awake()
     {
         mainCamera = Camera.main;
+        card = gameObject.GetComponent<Card>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -19,71 +22,80 @@ public class CardDragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         originalPosition = transform.position;
         gameObject.transform.localScale = new Vector3(1.65f * 1.1f, 0.0001f, 2.55f * 1.1f);
         transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+        card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("hover effect");
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
+        if (card.actualPlayer == card.table.turn || debugBothPlayers)
+        {
+            gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        //https://gist.github.com/SimonDarksideJ/477f5674285b63cba8e752c43950ed7c
-        Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
-        Vector3 PO = transform.position; // Take current position of this draggable object as Plane's Origin
-        Vector3 PN = -mainCamera.transform.forward; // Take current negative camera's forward as Plane's Normal
-        float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN); // plane vs. line intersection in algebric form. It find t as distance from the camera of the new point in the ray's direction.
-        Vector3 P = r.origin + r.direction * t; // Find the new point.
-
-        transform.position = P ;
-
-        transform.position = new Vector3(transform.position.x, 3, transform.position.z);
-
-        //TODO: Dymki mówi¹ce nad czym jest karta
-
-        GameObject otherObject = CheckActionPossibility(r, true);
-        if(otherObject != null)
+        if (card.actualPlayer == card.table.turn || debugBothPlayers)
         {
-            //Debug.Log("Karta");
-        }
-        else
-        {
-            otherObject = CheckActionPossibility(r, false);
+            //https://gist.github.com/SimonDarksideJ/477f5674285b63cba8e752c43950ed7c
+            Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
+            Vector3 PO = transform.position; // Take current position of this draggable object as Plane's Origin
+            Vector3 PN = -mainCamera.transform.forward; // Take current negative camera's forward as Plane's Normal
+            float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN); // plane vs. line intersection in algebric form. It find t as distance from the camera of the new point in the ray's direction.
+            Vector3 P = r.origin + r.direction * t; // Find the new point.
+
+            transform.position = P;
+
+            transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+
+            //TODO: Dymki mówi¹ce nad czym jest karta
+
+            GameObject otherObject = CheckActionPossibility(r, true);
             if (otherObject != null)
             {
-                //Debug.Log("Obszar");
+                //Debug.Log("Karta");
+            }
+            else
+            {
+                otherObject = CheckActionPossibility(r, false);
+                if (otherObject != null)
+                {
+                    //Debug.Log("Obszar");
+                }
             }
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
-        Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
-        GameObject otherObject = CheckActionPossibility(r, true);
-        if (otherObject != null)
+        if (card.actualPlayer == card.table.turn || debugBothPlayers)
         {
-            this.gameObject.GetComponent<Card>().cardInfo.OnHittingOtherCard(otherObject);
-        }
-        else
-        {
-            otherObject = CheckActionPossibility(r, false);
+            Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
+            GameObject otherObject = CheckActionPossibility(r, true);
             if (otherObject != null)
             {
-                this.gameObject.GetComponent<Card>().table.ChangeArea(this.gameObject, otherObject.GetComponent<Area>().area);
+                card.cardInfo.OnHittingOtherCard(otherObject);
             }
             else
             {
-                transform.position = originalPosition;
+                otherObject = CheckActionPossibility(r, false);
+                if (otherObject != null)
+                {
+                    this.gameObject.GetComponent<Card>().table.ChangeArea(this.gameObject, otherObject.GetComponent<Area>().area);
+                }
+                else
+                {
+                    transform.position = originalPosition;
+                }
             }
+            this.gameObject.GetComponent<Card>().table.CleanTable();
         }
-        this.gameObject.GetComponent<Card>().table.CleanTable();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
-        this.gameObject.GetComponent<Card>().table.CleanTable();
+        card.table.CleanTable();
     }
 
     public GameObject CheckActionPossibility(Ray r, bool cardOrArea)
@@ -131,7 +143,6 @@ public class CardDragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public bool CheckCardActionPossibility(GameObject cardObject, GameObject otherObject)
     {
-        Card card = cardObject.GetComponent<Card>();
         Card otherCard = otherObject.GetComponent<Card>();
         string move = "";
         move += card.area;
@@ -146,7 +157,6 @@ public class CardDragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public bool CheckAreaActionPossibility(GameObject cardObject, GameObject otherObject)
     {
-        Card card = cardObject.GetComponent<Card>();
         Area otherArea = otherObject.GetComponent<Area>();
         string move = "";
         move += card.area;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class CardInfo
 {
+    private Table table;
     public Card card;
     public int strength, health;
     public string name;
@@ -24,20 +25,40 @@ public abstract class CardInfo
 
     public virtual void OnChangingArea()
     {
-        card.areaParticles.Play();
+        card.cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+        card.cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+
+        switch (card.area)
+        {
+            case 0:
+                break;
+            case 1:
+                card.areaParticles.Play();
+                card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card effect 1");
+                break;
+            case 2:
+                card.areaParticles.Play();
+                card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card put effect");
+                break;
+            case 3:
+                card.deathParticles.Play();
+                card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card effect 3");
+                card.cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.5f, 0.5f, 0.5f);
+                card.cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.5f, 0.5f, 0.5f);
+                break;
+        }
     }
 
     public virtual void OnHittingOtherCard(GameObject otherCardObject)
     {
+        card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card hit");
         Card otherCard = otherCardObject.GetComponent<Card>();
-        otherCard.hitParticles.Play();
+
         otherCard.actualHealth -= card.actualStrength;
-        otherCard.hitParticles.Play();
         if (otherCard.actualHealth <= 0)
-        {
             otherCard.cardInfo.OnDie();
-            otherCard.deathParticles.Play();
-        }
+        else
+            otherCard.hitParticles.Play();
     }
 
     public virtual void OnDie()

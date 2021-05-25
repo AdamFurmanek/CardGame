@@ -10,6 +10,9 @@ public class Card : MonoBehaviour
     public int originalPlayer, actualPlayer;
     public int area;
 
+    public GameObject cardObjectTop;
+    public GameObject cardObjectBottom;
+
     public GameObject healthLabel;
     public GameObject strengthLabel;
     public GameObject nameLabel;
@@ -19,6 +22,11 @@ public class Card : MonoBehaviour
     public ParticleSystem areaParticles;
 
     public float positionXOffset, positionZOffset, rotationOffset;
+
+    private void Start()
+    {
+        table = FindObjectOfType<Table>();
+    }
 
     public void ResetStats()
     {

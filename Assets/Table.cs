@@ -7,6 +7,7 @@ public class Table : MonoBehaviour
 {
     public GameObject cardObjectPrefab;
     public GameObject[] areas;
+    public GameObject soundsPlayer;
 
     public List<List<GameObject>>[] cards = new List<List<GameObject>>[2];
 
@@ -49,16 +50,6 @@ public class Table : MonoBehaviour
                 ChangeArea(newCardObject, 0);
             }
         }
-
-        //Kilka przyk³adowych zmian
-        ChangeArea(cards[0][0][0], 1);
-        ChangeArea(cards[0][0][0], 2);
-        for(int i = 0; i < 10; i++)
-        {
-            ChangeArea(cards[0][0][0], 3);
-            ChangeArea(cards[1][0][0], 3);
-        }
-
 
         CleanTable();
 
