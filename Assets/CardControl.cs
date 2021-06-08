@@ -4,12 +4,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardControl : MonoBehaviour
 {
     Camera mainCamera;
     Card card;
-    Vector3 originalPosition;
     bool debugBothPlayers = true;
+    bool dragging = false;
 
     private void Awake()
     {
@@ -17,56 +17,61 @@ public class CardControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         card = gameObject.GetComponent<Card>();
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void Update()
     {
-        originalPosition = transform.position;
-        gameObject.transform.localScale = new Vector3(1.65f * 1.1f, 0.0001f, 2.55f * 1.1f);
-        transform.position = new Vector3(transform.position.x, 3, transform.position.z);
-        card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("hover effect");
+        if (dragging)
+            if (card.actualPlayer == card.table.turn || debugBothPlayers)
+            {
+                //https://gist.github.com/SimonDarksideJ/477f5674285b63cba8e752c43950ed7c
+                Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
+                Vector3 PO = transform.position; // Take current position of this draggable object as Plane's Origin
+                Vector3 PN = -mainCamera.transform.forward; // Take current negative camera's forward as Plane's Normal
+                float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN); // plane vs. line intersection in algebric form. It find t as distance from the camera of the new point in the ray's direction.
+                Vector3 P = r.origin + r.direction * t; // Find the new point.
+
+                transform.position = P;
+
+                transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+
+                //TODO: Dymki mówi¹ce nad czym jest karta
+
+                GameObject otherObject = CheckActionPossibility(r, true);
+                if (otherObject != null)
+                {
+                    //Debug.Log("Karta");
+                }
+                else
+                {
+                    otherObject = CheckActionPossibility(r, false);
+                    if (otherObject != null)
+                    {
+                        //Debug.Log("Obszar");
+                    }
+                }
+            }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnMouseEnter()
+    {
+        if (!card.table.dragging)
+        {
+            gameObject.transform.localScale = new Vector3(1.65f * 1.1f, 0.0001f, 2.55f * 1.1f);
+            transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+            card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("hover effect");
+        }
+    }
+
+    private void OnMouseDown()
     {
         if (card.actualPlayer == card.table.turn || debugBothPlayers)
         {
             gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
+            dragging = true;
+            card.table.dragging = true;
         }
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (card.actualPlayer == card.table.turn || debugBothPlayers)
-        {
-            //https://gist.github.com/SimonDarksideJ/477f5674285b63cba8e752c43950ed7c
-            Ray r = mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
-            Vector3 PO = transform.position; // Take current position of this draggable object as Plane's Origin
-            Vector3 PN = -mainCamera.transform.forward; // Take current negative camera's forward as Plane's Normal
-            float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN); // plane vs. line intersection in algebric form. It find t as distance from the camera of the new point in the ray's direction.
-            Vector3 P = r.origin + r.direction * t; // Find the new point.
-
-            transform.position = P;
-
-            transform.position = new Vector3(transform.position.x, 3, transform.position.z);
-
-            //TODO: Dymki mówi¹ce nad czym jest karta
-
-            GameObject otherObject = CheckActionPossibility(r, true);
-            if (otherObject != null)
-            {
-                //Debug.Log("Karta");
-            }
-            else
-            {
-                otherObject = CheckActionPossibility(r, false);
-                if (otherObject != null)
-                {
-                    //Debug.Log("Obszar");
-                }
-            }
-        }
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
+    private void OnMouseUp()
     {
         if (card.actualPlayer == card.table.turn || debugBothPlayers)
         {
@@ -83,19 +88,21 @@ public class CardControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 {
                     this.gameObject.GetComponent<Card>().table.ChangeArea(this.gameObject, otherObject.GetComponent<Area>().area);
                 }
-                else
-                {
-                    transform.position = originalPosition;
-                }
+
             }
+            dragging = false;
+            card.table.dragging = false;
             this.gameObject.GetComponent<Card>().table.CleanTable();
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    private void OnMouseExit()
     {
-        gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
-        card.table.CleanTable();
+        if (!card.table.dragging)
+        {
+            gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
+            card.table.CleanTable();
+        }
     }
 
     public GameObject CheckActionPossibility(Ray r, bool cardOrArea)

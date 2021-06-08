@@ -12,6 +12,7 @@ public class Table : MonoBehaviour
     public List<List<GameObject>>[] cards = new List<List<GameObject>>[2];
 
     public int turn;
+    public bool dragging = false;
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class Table : MonoBehaviour
         {
             foreach (CardInfo cardInfo in newCards[i])
             {
-                GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+                GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(13, 0, Random.RandomRange(-10, 10)), new Quaternion(0, 0, 0, 0));
                 
                 cardInfo.card = newCardObject.GetComponent<Card>();
                 cardInfo.card.table = this;
@@ -58,6 +59,7 @@ public class Table : MonoBehaviour
 
     public void CleanTable()
     {
+        StopAllCoroutines();
         //Stos
         for(int i = 0; i < 2; i++)
         {
@@ -65,9 +67,10 @@ public class Table : MonoBehaviour
             {
                 GameObject cardObject = cards[i][0][j];
                 Card card = cardObject.GetComponent<Card>();
-                cardObject.transform.position = areas[i].transform.position
+                card.destinationPosition = areas[i].transform.position
                     + new Vector3(0, 1, 0) * j * 0.0001f
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
+                StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(180, card.rotationOffset, 0);
             }
         }
@@ -82,10 +85,11 @@ public class Table : MonoBehaviour
                 float difference = 1.65f / 2 - ((float)cards[i][1].Count/40);
                 Debug.Log(difference);
                 float offset = -(cards[i][1].Count - 1) * difference;
-                cardObject.transform.position = areas[2 + i].transform.position
+                card.destinationPosition = areas[2 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
                     + new Vector3(0, 1, 0) * (2f + j * 0.0001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
+                StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }
         }
@@ -99,10 +103,11 @@ public class Table : MonoBehaviour
                 Card card = cardObject.GetComponent<Card>();
                 float difference = 1.65f / 2 - ((float)cards[i][2].Count / 40);
                 float offset = -(cards[i][2].Count - 1) * difference;
-                cardObject.transform.position = areas[4 + i].transform.position
+                card.destinationPosition = areas[4 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
                     + new Vector3(0, 1, 0) * j * 0.0001f
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
+                StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }
         }
@@ -114,9 +119,11 @@ public class Table : MonoBehaviour
             {
                 GameObject cardObject = cards[i][3][j];
                 Card card = cardObject.GetComponent<Card>();
-                cardObject.transform.position = areas[6 + i].transform.position
+                card.destinationPosition = areas[6 + i].transform.position
                     + new Vector3(0, 1, 0) * j * 0.0001f
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
+
+                StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
             }
         }
@@ -134,7 +141,6 @@ public class Table : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void ChangeTurn()

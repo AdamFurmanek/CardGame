@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3167697133032157866}
   - component: {fileID: 2557893669584790170}
   - component: {fileID: -3851571022223856707}
-  - component: {fileID: 971539582955295189}
+  - component: {fileID: 6408806330478360777}
   m_Layer: 0
   m_Name: CardObject
   m_TagString: Card
@@ -92,7 +92,8 @@ MonoBehaviour:
   positionXOffset: 0
   positionZOffset: 0
   rotationOffset: 0
---- !u!114 &971539582955295189
+  destinationPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &6408806330478360777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9901,7 +9902,7 @@ RectTransform:
   m_GameObject: {fileID: 5467612026742407407}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.272}
-  m_LocalScale: {x: 0.045, y: 0.045, z: 1}
+  m_LocalScale: {x: 0.045, y: 0.045, z: 0.0001}
   m_Children: []
   m_Father: {fileID: 7024588743396303101}
   m_RootOrder: 4
@@ -10071,7 +10072,7 @@ RectTransform:
   m_GameObject: {fileID: 6126828220499649065}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.396}
-  m_LocalScale: {x: 0.045, y: 0.045, z: 1}
+  m_LocalScale: {x: 0.045, y: 0.045, z: 0.0001}
   m_Children: []
   m_Father: {fileID: 7024588743396303101}
   m_RootOrder: 2
@@ -15045,7 +15046,7 @@ RectTransform:
   m_GameObject: {fileID: 8588635634377634229}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.396}
-  m_LocalScale: {x: 0.045, y: 0.045, z: 1}
+  m_LocalScale: {x: 0.045, y: 0.045, z: 0.0001}
   m_Children: []
   m_Father: {fileID: 7024588743396303101}
   m_RootOrder: 3
