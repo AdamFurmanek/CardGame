@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Card : MonoBehaviour
@@ -32,6 +33,16 @@ public class Card : MonoBehaviour
         table = FindObjectOfType<Table>();
     }
 
+    public void Prepare(CardInfo cardInfo, int originalPlayer)
+    {
+        this.cardInfo = cardInfo;
+        this.originalPlayer = originalPlayer;
+        ResetStats();
+        nameLabel.GetComponent<TextMeshPro>().text = cardInfo.name;
+        cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+        cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+    }
+
     public void ResetStats()
     {
         actualHealth = cardInfo.health;
@@ -44,7 +55,6 @@ public class Card : MonoBehaviour
         float deltaX = destinationPosition.x - gameObject.transform.position.x;
         float deltaY = destinationPosition.y - gameObject.transform.position.y;
         float deltaZ = destinationPosition.z - gameObject.transform.position.z;
-        //float deltaXZ = (float)Math.Sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
         float deltaScaleX = destinationScale.x - gameObject.transform.localScale.x;
         float deltaScaleY = destinationScale.y - gameObject.transform.localScale.y;
@@ -53,14 +63,10 @@ public class Card : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             gameObject.transform.position += new Vector3(deltaX, deltaY, deltaZ) / 10;
-            Debug.Log("oryginal: " + gameObject.transform.localScale.x);
-            Debug.Log("destynacja: " + destinationScale.x);
-            Debug.Log("roznica " +  deltaScaleX);
             gameObject.transform.localScale += new Vector3(deltaScaleX, deltaScaleY, deltaScaleZ) / 10;
 
             yield return null;
         }
-
     }
 
 }

@@ -12,7 +12,6 @@ public class Table : MonoBehaviour
     public List<List<GameObject>>[] cards = new List<List<GameObject>>[2];
 
     public int turn;
-    public bool dragging = false;
 
     void Start()
     {
@@ -40,14 +39,9 @@ public class Table : MonoBehaviour
             foreach (CardInfo cardInfo in newCards[i])
             {
                 GameObject newCardObject = Instantiate(cardObjectPrefab, new Vector3(13, 0, Random.RandomRange(-10, 10)), new Quaternion(0, 0, 0, 0));
-                
-                cardInfo.card = newCardObject.GetComponent<Card>();
-                cardInfo.card.table = this;
-                cardInfo.card.cardInfo = cardInfo;
-                cardInfo.card.originalPlayer = i;
-                cardInfo.card.ResetStats();
-                cardInfo.SetPossibleMoves();
-                cardInfo.card.nameLabel.GetComponent<TextMeshPro>().text = cardInfo.name;
+                Card card = newCardObject.GetComponent<Card>();
+                card.Prepare(cardInfo, i);
+                cardInfo.card = card;
                 ChangeArea(newCardObject, 0);
             }
         }
@@ -91,7 +85,6 @@ public class Table : MonoBehaviour
                 GameObject cardObject = cards[i][1][j];
                 Card card = cardObject.GetComponent<Card>();
                 float difference = 1.65f / 2 - ((float)cards[i][1].Count/40);
-                Debug.Log(difference);
                 float offset = -(cards[i][1].Count - 1) * difference;
                 card.destinationPosition = areas[2 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
@@ -173,7 +166,6 @@ public class Table : MonoBehaviour
         cards[card.actualPlayer][card.area].Remove(cardObject);
         card.area = destination;
         cards[card.actualPlayer][card.area].Add(cardObject);
-        card.cardInfo.OnChangingArea();
 
         switch (destination)
         {
