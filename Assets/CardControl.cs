@@ -20,6 +20,14 @@ public class CardControl : MonoBehaviour
     private void Update()
     {
         if (dragging)
+        {
+            foreach (GameObject area in card.table.areas)
+                area.GetComponent<MeshRenderer>().enabled = false;
+
+            foreach (var list in card.table.cards)
+                foreach (var list2 in list)
+                    foreach (var card in list2)
+                        card.GetComponent<Card>().cardObjectCover.SetActive(false);
             if (card.actualPlayer == card.table.turn || debugBothPlayers)
             {
                 //https://gist.github.com/SimonDarksideJ/477f5674285b63cba8e752c43950ed7c
@@ -39,6 +47,7 @@ public class CardControl : MonoBehaviour
                 if (otherObject != null)
                 {
                     //Debug.Log("Karta");
+                    otherObject.GetComponent<Card>().cardObjectCover.SetActive(true);
                 }
                 else
                 {
@@ -46,9 +55,11 @@ public class CardControl : MonoBehaviour
                     if (otherObject != null)
                     {
                         //Debug.Log("Obszar");
+                        otherObject.GetComponent<MeshRenderer>().enabled = true;
                     }
                 }
             }
+        }
     }
 
     public void OnMouseEnter()
@@ -100,7 +111,6 @@ public class CardControl : MonoBehaviour
     {
         if (!card.table.dragging)
         {
-            gameObject.transform.localScale = new Vector3(1.65f, 0.0001f, 2.55f);
             card.table.CleanTable();
         }
     }

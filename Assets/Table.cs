@@ -59,6 +59,14 @@ public class Table : MonoBehaviour
 
     public void CleanTable()
     {
+        foreach(GameObject area in areas)
+            area.GetComponent<MeshRenderer>().enabled = false;
+
+        foreach(var list in cards)
+            foreach(var list2 in list)
+                foreach(var card in list2)
+                    card.GetComponent<Card>().cardObjectCover.SetActive(false);
+
         StopAllCoroutines();
         //Stos
         for(int i = 0; i < 2; i++)

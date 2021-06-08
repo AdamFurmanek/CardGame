@@ -13,6 +13,7 @@ public class Card : MonoBehaviour
 
     public GameObject cardObjectTop;
     public GameObject cardObjectBottom;
+    public GameObject cardObjectCover;
 
     public GameObject healthLabel;
     public GameObject strengthLabel;
@@ -24,6 +25,7 @@ public class Card : MonoBehaviour
 
     public float positionXOffset, positionZOffset, rotationOffset;
     public Vector3 destinationPosition;
+    private Vector3 destinationScale = new Vector3(1.65f, 0.0001f, 2.55f);
 
     private void Start()
     {
@@ -42,16 +44,23 @@ public class Card : MonoBehaviour
         float deltaX = destinationPosition.x - gameObject.transform.position.x;
         float deltaY = destinationPosition.y - gameObject.transform.position.y;
         float deltaZ = destinationPosition.z - gameObject.transform.position.z;
-        float deltaXZ = (float)Math.Sqrt(deltaX * deltaX + deltaZ * deltaZ);
+        //float deltaXZ = (float)Math.Sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
-        for(int i = 0; i < 10; i++)
+        float deltaScaleX = destinationScale.x - gameObject.transform.localScale.x;
+        float deltaScaleY = destinationScale.y - gameObject.transform.localScale.y;
+        float deltaScaleZ = destinationScale.z - gameObject.transform.localScale.z;
+
+        for (int i = 0; i < 10; i++)
         {
-            gameObject.transform.position += new Vector3(1, 0, 0) * deltaX / 10;
-            gameObject.transform.position += new Vector3(0, 1, 0) * deltaY / 10;
-            gameObject.transform.position += new Vector3(0, 0, 1) * deltaZ / 10;
+            gameObject.transform.position += new Vector3(deltaX, deltaY, deltaZ) / 10;
+            Debug.Log("oryginal: " + gameObject.transform.localScale.x);
+            Debug.Log("destynacja: " + destinationScale.x);
+            Debug.Log("roznica " +  deltaScaleX);
+            gameObject.transform.localScale += new Vector3(deltaScaleX, deltaScaleY, deltaScaleZ) / 10;
 
             yield return null;
         }
+
     }
 
 }
