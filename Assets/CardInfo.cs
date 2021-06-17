@@ -33,22 +33,23 @@ public abstract class CardInfo
     {
         card.areaParticles.Play();
         card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card effect 1");
-        card.cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
-        card.cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+        card.actualColor = new Color(1f, 1f, 1f);
+        card.destinationColor = new Color(0.8f, 0.8f, 0.8f);
     }
 
     public void FromHandToTable()
     {
         card.areaParticles.Play();
         card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card put effect");
-        card.cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
-        card.cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
+        card.actualColor = new Color(1f, 1f, 1f);
+        card.destinationColor = new Color(0.8f, 0.8f, 0.8f);
     }
 
     public void HitOtherCard(GameObject otherCardObject)
     {
         card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card hit");
         Card otherCard = otherCardObject.GetComponent<Card>();
+        otherCard.actualColor = new Color(1f, 0.2f, 0.2f);
 
         otherCard.actualHealth -= card.actualStrength;
         if (otherCard.actualHealth <= 0)
@@ -62,7 +63,6 @@ public abstract class CardInfo
         card.table.ChangeArea(card.gameObject, 3);
         card.deathParticles.Play();
         card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("card effect 3");
-        card.cardObjectTop.GetComponent<Renderer>().material.color = new Color(0.5f, 0.5f, 0.5f);
-        card.cardObjectBottom.GetComponent<Renderer>().material.color = new Color(0.5f, 0.5f, 0.5f);
+        card.destinationColor = new Color(0.5f, 0.5f, 0.5f);
     }
 }

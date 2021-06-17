@@ -23,10 +23,10 @@ public class CardControl : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        if (!anyDragging)
+        if ((card.actualPlayer == card.table.turn || debugBothPlayers) && !anyDragging)
         {
             gameObject.transform.localScale = new Vector3(1.65f * 1.1f, 0.0001f, 2.55f * 1.1f);
-            transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+            transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
             card.table.soundsPlayer.GetComponent<SoundsPlayer>().PlaySound("hover effect");
         }
     }
@@ -41,7 +41,7 @@ public class CardControl : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void OnMouseDrag()
     {
         if (thisDragging)
         {
@@ -61,7 +61,7 @@ public class CardControl : MonoBehaviour
                 Vector3 PN = -mainCamera.transform.forward;
                 float t = Vector3.Dot(PO - r.origin, PN) / Vector3.Dot(r.direction, PN);
                 transform.position = r.origin + r.direction * t;
-                transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+                transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
 
                 List<RaycastHit> otherObjects = new List<RaycastHit>();
                 otherObjects.AddRange(Physics.RaycastAll(r, Mathf.Infinity));
@@ -144,7 +144,7 @@ public class CardControl : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (!anyDragging)
+        if ((card.actualPlayer == card.table.turn || debugBothPlayers) && !anyDragging)
         {
             card.table.CleanTable();
         }

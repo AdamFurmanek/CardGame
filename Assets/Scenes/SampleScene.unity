@@ -3712,7 +3712,6 @@ MonoBehaviour:
   - {fileID: 716399144}
   soundsPlayer: {fileID: 1721111756}
   turn: 0
-  dragging: 0
 --- !u!33 &1559977795
 MeshFilter:
   m_ObjectHideFlags: 0

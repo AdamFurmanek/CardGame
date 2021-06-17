@@ -70,10 +70,10 @@ public class Table : MonoBehaviour
                 GameObject cardObject = cards[i][0][j];
                 Card card = cardObject.GetComponent<Card>();
                 card.destinationPosition = areas[i].transform.position
-                    + new Vector3(0, 1, 0) * j * 0.0001f
+                    + new Vector3(0, 1, 0) * (j * 0.0001f + 0.0001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 StartCoroutine(card.Move());
-                cardObject.transform.rotation = Quaternion.Euler(180, card.rotationOffset, 0);
+                cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 180);
             }
         }
 
@@ -88,7 +88,7 @@ public class Table : MonoBehaviour
                 float offset = -(cards[i][1].Count - 1) * difference;
                 card.destinationPosition = areas[2 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
-                    + new Vector3(0, 1, 0) * (2f + j * 0.0001f)
+                    + new Vector3(0, 1, 0) * (j * 0.0001f + 0.2001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
@@ -106,7 +106,7 @@ public class Table : MonoBehaviour
                 float offset = -(cards[i][2].Count - 1) * difference;
                 card.destinationPosition = areas[4 + i].transform.position
                     + new Vector3(1, 0, 0) * (offset + j * difference * 2)
-                    + new Vector3(0, 1, 0) * j * 0.0001f
+                    + new Vector3(0, 1, 0) * (j * 0.0001f + 0.0001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
                 StartCoroutine(card.Move());
                 cardObject.transform.rotation = Quaternion.Euler(0, card.rotationOffset, 0);
@@ -121,7 +121,7 @@ public class Table : MonoBehaviour
                 GameObject cardObject = cards[i][3][j];
                 Card card = cardObject.GetComponent<Card>();
                 card.destinationPosition = areas[6 + i].transform.position
-                    + new Vector3(0, 1, 0) * j * 0.0001f
+                    + new Vector3(0, 1, 0) * (j * 0.0001f + 0.0001f)
                     + new Vector3(card.positionXOffset, 0, card.positionZOffset);
 
                 StartCoroutine(card.Move());
